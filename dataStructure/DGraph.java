@@ -26,13 +26,16 @@ public class DGraph implements graph{
 
 	@Override
 	public void addNode(node_data n) {
+		if(!vertices.containsKey(n)) {
+			vertices.put((node) n, new HashSet<edge>());
+			numOfVertices++;
+		}
 
 		
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		// TODO Auto-generated method stub
 		
 	}
 
