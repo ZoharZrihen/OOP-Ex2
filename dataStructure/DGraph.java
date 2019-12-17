@@ -1,11 +1,20 @@
 package dataStructure;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class DGraph implements graph{
+	private int numOfVertices;
+	private HashMap<node, HashSet<edge>> vertices;
+
+	public DGraph(){
+		numOfVertices=0;
+		vertices=new HashMap<node,HashSet<edge>>();
+	}
+
 	@Override
 	public node_data getNode(int key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -17,7 +26,7 @@ public class DGraph implements graph{
 
 	@Override
 	public void addNode(node_data n) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
