@@ -2,26 +2,31 @@ package dataStructure;
 
 import utils.Point3D;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class node implements node_data{
-    private HashSet<edge> edges;
+   // private HashSet<edge> edges;
     private int key;
     private Point3D location;
     private double weight;
     private String info;
     private int tag;
+    private HashMap<Integer,edge> edges;
+    private int numOfEdges;
 
     public node(){
-        edges=new HashSet<edge>();
+        edges=new HashMap<>();
         key=0;
         location=new Point3D(0,0,0);
         weight=0;
         info=null;
         tag=0;
+        numOfEdges=0;
+
     }
     public node(int k){
-        edges=new HashSet<edge>();
+        edges=new HashMap<>();
         key=k;
         location=new Point3D(0,0,0);
         weight=0;
@@ -30,7 +35,7 @@ public class node implements node_data{
     }
 
     public node(int k,Point3D p,double w){
-        edges=new HashSet<edge>();
+        edges=new HashMap<>();
         key=k;
         location=new Point3D(p);
         weight=w;
@@ -38,12 +43,13 @@ public class node implements node_data{
         tag=0;
     }
     public node(node n){
-        edges=new HashSet<edge>(n.getEdges());
+        edges=new HashMap(n.getEdges());
         key=n.getKey();
         location=n.getLocation();
         weight=n.getWeight();
         info=n.getInfo();
         tag=n.getTag();
+        numOfEdges=n.getNumOfEdges();
     }
     @Override
     public int getKey() {
@@ -90,11 +96,18 @@ public class node implements node_data{
         tag=t;
     }
 
-    public HashSet<edge> getEdges() {
+    public HashMap<Integer,edge> getEdges() {
         return edges;
     }
-    public void addEdge(edge e){
-        edges.add(e);
+
+    public edge getEdge(int dest){
+        return this.edges.get(dest);
+    }
+    public int getNumOfEdges(){
+        return numOfEdges;
+    }
+    public void setNumOfEdges(int k){
+        numOfEdges=k;
     }
 
 }

@@ -14,9 +14,18 @@ public class edge implements edge_data {
         info=null;
         weight=0;
     }
+
     public edge(node s, node d, double w){
-        source=new node(s);
-        dest=new node(d);
+        source=s;
+        dest= d;
+    }
+
+    public edge(edge e){
+        source=new node(e.source);
+        dest=new node(e.dest);
+        tag=e.getTag();
+        info=e.getInfo();
+        weight=e.getWeight();
     }
 
     @Override
