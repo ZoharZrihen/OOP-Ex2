@@ -35,6 +35,7 @@ public class DGraphTest {
 
         }
         System.out.println("number of vertices: "+D.nodeSize() + "  number of edges: " + D.edgeSize());
+
     }
 
     @org.junit.Test

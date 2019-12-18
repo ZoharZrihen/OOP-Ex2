@@ -13,6 +13,12 @@ public class DGraph implements graph{
 		numOfVertices=0;
 		vertices=new HashMap<Integer, node>();
 	}
+	public DGraph(DGraph gr){
+		numOfVertices=gr.nodeSize();
+		numOfEdges=gr.edgeSize();
+		vertices=new HashMap<>(gr.getVertices());
+		ModeCount=gr.getMC();
+	}
 
 	@Override
 	public node_data getNode(int key) {
@@ -101,6 +107,11 @@ public class DGraph implements graph{
 	@Override
 	public int getMC() {
 		return ModeCount;
+	}
+
+
+	public HashMap<Integer,node> getVertices(){
+		return vertices;
 	}
 
 }

@@ -62,4 +62,10 @@ public class edge implements edge_data {
     public void setTag(int t) {
         tag=t;
     }
+    public node getSource(){
+        return source;
+    }
+    public node getDestination(){
+        return dest;
+    }
 }
