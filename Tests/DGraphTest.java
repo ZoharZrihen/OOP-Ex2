@@ -18,10 +18,23 @@ public class DGraphTest {
 
     @org.junit.Test
     public void addNode() {
-        for(int i=1;i<5;i++) {
+        for(int i=1;i<1000000;i++) {
             D.addNode(new node(i));
+        }
+        for(int i=1;i<999989;i++){
+            D.connect(i,i+1,0);
+            D.connect(i,i+2,0);
+            D.connect(i,i+3,0);
+            D.connect(i,i+4,0);
+            D.connect(i,i+5,0);
+            D.connect(i,i+6,0);
+            D.connect(i,i+7,0);
+            D.connect(i,i+8,0);
+            D.connect(i,i+9,0);
+            D.connect(i,i+10,0);
 
         }
+        System.out.println("number of vertices: "+D.nodeSize() + "  number of edges: " + D.edgeSize());
     }
 
     @org.junit.Test
