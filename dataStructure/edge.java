@@ -7,17 +7,9 @@ public class edge implements edge_data {
     private String info;
     private double weight;
 
-    public edge(node s){
-        source=new node(s);
-        dest=null;
-        tag=0;
-        info=null;
-        weight=0;
-    }
-
-    public edge(node s, node d, double w){
-        source=s;
-        dest= d;
+    public edge(node_data s, node_data d, double w){
+        source=(node)s;
+        dest= (node)d;
     }
 
     public edge(edge e){

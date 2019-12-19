@@ -2,7 +2,6 @@ package Tests;
 
 import dataStructure.DGraph;
 import dataStructure.node;
-import org.junit.rules.Stopwatch;
 
 import static org.junit.Assert.*;
 
@@ -34,6 +33,9 @@ public class DGraphTest {
             D.connect(i,i+10,0);
 
         }
+        for(int i=1;i<50;i++){
+            D.removeNode(i);
+        }
         System.out.println("number of vertices: "+D.nodeSize() + "  number of edges: " + D.edgeSize());
 
     }
@@ -61,8 +63,9 @@ public class DGraphTest {
         assertEquals(2,D.nodeSize());
         D.addNode(new node(4));
         D.addNode(new node(5));
-        D.addNode(new node(2)); //aleardy used key
+        D.addNode(new node(2)); //already used key
         assertEquals(4,D.nodeSize());
+
     }
 
     @org.junit.Test

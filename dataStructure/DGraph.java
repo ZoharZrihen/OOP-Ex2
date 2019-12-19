@@ -1,23 +1,23 @@
 package dataStructure;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class DGraph implements graph{
-	private int numOfVertices;
-	private int numOfEdges;
-	private HashMap<Integer, node> vertices;
+public class DGraph implements graph, Serializable {
+	private static int numOfEdgesG=0;
+	private HashMap<Integer, node_data> vertices;
+    private int numOfVertices;
 	private int ModeCount;
 
 	public DGraph(){
 		numOfVertices=0;
-		vertices=new HashMap<Integer, node>();
+		vertices=new HashMap<Integer, node_data>();
 	}
 	public DGraph(DGraph gr){
 		numOfVertices=gr.nodeSize();
-		numOfEdges=gr.edgeSize();
 		vertices=new HashMap<>(gr.getVertices());
-		ModeCount=gr.getMC();
+		ModeCount=0;
 	}
 
 	@Override
@@ -31,17 +31,18 @@ public class DGraph implements graph{
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		if(vertices.containsKey(src)&& vertices.containsKey(dest)){
-			return vertices.get(src).getEdge(dest);
+		    node_data n =vertices.get(src);
+			return ((node)n).getEdge(dest);
 		}
 		else return null;
 	}
 
 	@Override
 	public void addNode(node_data n) {
-		if(!vertices.containsKey(n.getKey())) {
-			vertices.put(n.getKey(),(node)n);
+	    node n1= (node) n;
+		if(!vertices.containsKey(n1.getKey())) {
+			vertices.put(n1.getKey(),n1);
 			numOfVertices++;
-			numOfEdges+=((node) n).getNumOfEdges();
 			ModeCount++;
 		}
 	}
@@ -49,10 +50,8 @@ public class DGraph implements graph{
 	@Override
 	public void connect(int src, int dest, double w) {
 		try {
-			vertices.get(src).getEdges().put(dest, new edge(vertices.get(src), vertices.get(dest), w));
-			vertices.get(src).setNumOfEdges(vertices.get(src).getNumOfEdges()+1);
-			vertices.get(dest).setNumOfEdges(vertices.get(dest).getNumOfEdges()+1);
-			numOfEdges++;
+		    node_data n=vertices.get(src);
+            ((node)n).getEdges().put(dest, new edge(vertices.get(src), vertices.get(dest), w));
 			ModeCount++;
 		} catch (Exception e) {
 			 e.printStackTrace();
@@ -61,33 +60,37 @@ public class DGraph implements graph{
 
 	@Override
 	public Collection<node_data> getV() {
-		return (Collection<node_data>) vertices;
+		return vertices.values();
 	}
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		return (Collection<edge_data>) vertices.get(node_id).getEdges();
+	    node_data n=vertices.get(node_id);
+	    return ((node)n).getEdges().values();
 	}
 
 	@Override
 	public node_data removeNode(int key) {
-		node n=vertices.get(key);
-		int k=vertices.get(key).getNumOfEdges();
-		numOfEdges-=vertices.get(key).getNumOfEdges();
-		vertices.remove(key);
-		numOfVertices--;
-		ModeCount++;
-
-		return n;
-	}
-
+        try {
+            node_data n = vertices.remove(key); //go over all the hash and check if dest removed
+            numOfVertices--;
+            ModeCount++;
+            Object[] arr = vertices.keySet().toArray();
+            for (int i = 0; i < arr.length; i++) {
+                if (((node) vertices.get(arr[i])).getEdges().get(key) != null) {
+                    ((node) vertices.get(arr[i])).getEdges().remove(key);
+                    ModeCount++;
+                }
+            }
+            return n;
+        } catch(Exception e){
+            return null;
+        }
+    }
 	@Override
 	public edge_data removeEdge(int src, int dest) {
 		try {
-			edge e = new edge(vertices.get(src).getEdges().get(dest));
-			vertices.get(src).getEdges().remove(dest);
-			numOfEdges--;
-			return e;
+			return ((node)vertices.get(src)).getEdges().remove(dest);
 		}
 		catch (Exception e) {
 			return null;
@@ -101,7 +104,8 @@ public class DGraph implements graph{
 
 	@Override
 	public int edgeSize() {
-		return numOfEdges;
+	    getNumOfEdgesG();
+		return numOfEdgesG;
 	}
 
 	@Override
@@ -110,8 +114,23 @@ public class DGraph implements graph{
 	}
 
 
-	public HashMap<Integer,node> getVertices(){
+	public HashMap<Integer,node_data> getVertices(){
 		return vertices;
 	}
-
+    public int getNumOfEdgesG(){
+	    numOfEdgesG=0;
+	    Object[] arr=vertices.keySet().toArray();
+	    for(int i=0;i<arr.length;i++){
+            numOfEdgesG+=((node)vertices.get(arr[i])).getEdges().size();
+        }
+	    return numOfEdgesG;
+    }
+    public String toString(){
+        String t="";
+	    Object[] arr=vertices.keySet().toArray();
+        for(int i=0;i<arr.length;i++){
+            t+=vertices.get(arr[i]).getKey() + " -> " ;
+        }
+        return t;
+    }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import dataStructure.graph;
 import dataStructure.node_data;
 
-public interface graph_algorithms  {
+public interface graph_algorithms {
 	/**
 	 * Init this set of algorithms on the parameter - graph.
 	 * @param g

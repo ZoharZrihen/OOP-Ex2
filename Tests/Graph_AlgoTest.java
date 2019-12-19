@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 
 public class Graph_AlgoTest {
     Graph_Algo ga=new Graph_Algo();
+
     public void main(){
         DGraph gra=new DGraph();
         for(int i=1;i<5;i++){
@@ -59,6 +60,9 @@ public class Graph_AlgoTest {
         ga.init(gra);
         assertTrue(ga.isConnected());
         gra.removeEdge(3,4);
+        assertFalse(ga.isConnected());
+        gra.connect(3,4,0);
+        gra.removeNode(3);
         assertFalse(ga.isConnected());
     }
 
