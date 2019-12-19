@@ -1,15 +1,11 @@
 package algorithms;
+import java.io.*;
 import java.util.Iterator;
 import java.util.List;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import dataStructure.*;
 
-public class Graph_Algo implements graph_algorithms{
+public class Graph_Algo implements graph_algorithms, Serializable {
 		private DGraph gr=new DGraph();
 
 	@Override

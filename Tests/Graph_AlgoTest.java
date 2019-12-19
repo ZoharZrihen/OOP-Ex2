@@ -10,24 +10,6 @@ import static org.junit.Assert.*;
 public class Graph_AlgoTest {
     Graph_Algo ga=new Graph_Algo();
 
-    public void main(){
-        DGraph gra=new DGraph();
-        for(int i=1;i<5;i++){
-            gra.addNode(new node(i));
-        }
-            gra.connect(1,2,0);
-            gra.connect(2,1,0);
-            gra.connect(2,3,0);
-            gra.connect(3,4,0);
-            gra.connect(3,2,0);
-            gra.connect(4,3,0);
-            ga.init(gra);
-        System.out.println(ga.isConnected());
-        }
-
-
-
-
     @Test
     public void init() {
 
@@ -41,6 +23,17 @@ public class Graph_AlgoTest {
 
     @Test
     public void save() {
+        DGraph g1=new DGraph();
+        g1.addNode(new node(1));
+        g1.addNode(new node(2));
+        g1.addNode(new node(3));
+        ga.init(g1);
+        System.out.println("before: " + ga.getGr().toString());
+        ga.save("myGraph.txt");
+        ga.getGr().getVertices().clear();
+        ga.init("myGraph.txt");
+        System.out.println(" after (should be same)" + ga.getGr().toString());
+
     }
 
     @Test

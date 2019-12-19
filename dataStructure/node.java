@@ -2,10 +2,11 @@ package dataStructure;
 
 import utils.Point3D;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class node implements node_data{
+public class node implements node_data, Serializable {
     private int key;
     private Point3D location;
     private double weight;

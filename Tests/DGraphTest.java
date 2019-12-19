@@ -33,7 +33,7 @@ public class DGraphTest {
             D.connect(i,i+10,0);
 
         }
-        for(int i=1;i<50;i++){
+        for(int i=1;i<500;i++){
             D.removeNode(i);
         }
         System.out.println("number of vertices: "+D.nodeSize() + "  number of edges: " + D.edgeSize());
