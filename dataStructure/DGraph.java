@@ -50,8 +50,8 @@ public class DGraph implements graph, Serializable {
 	@Override
 	public void connect(int src, int dest, double w) {
 		try {
-		    node_data n=vertices.get(src);
-            ((node)n).getEdges().put(dest, new edge(vertices.get(src), vertices.get(dest), w));
+		    //node_data n=vertices.get(src);
+            ((node)vertices.get(src)).getEdges().put(dest, new edge(vertices.get(src), vertices.get(dest), w));
 			ModeCount++;
 		} catch (Exception e) {
 			 e.printStackTrace();

@@ -85,9 +85,20 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		for(int i=0;i<arr.length;i++){
 			if(((node)graph.getVertices().get(arr[i])).getEdges()!=null){
 				Object [] a=((node)graph.getVertices().get(arr[i])).getEdges().keySet().toArray();
-				for(int j=0;j<a.length;j++){
-					graph.removeEdge((int)arr[i],(int)a[j]);
-					graph.connect((int)a[j],(int)arr[i],0);
+				for(int j=0;j<a.length;j++) {
+					if (((node) graph.getVertices().get(arr[i])).getEdges().get(a[j]).getTag() != 1) {
+						graph.removeEdge((int) arr[i], (int) a[j]);
+						if (((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]) != null){
+							((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]).setTag(1);
+						graph.connect((int) arr[i], (int) a[j], 0);
+						((node) graph.getVertices().get(arr[i])).getEdges().get(a[j]).setTag(1);
+						//graph.connect((int) a[j], (int) arr[i], 0);
+					}
+						else{
+							graph.connect((int)a[j],(int)arr[i],0);
+							((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]).setTag(1);
+						}
+				}
 				}
 			}
 		}
