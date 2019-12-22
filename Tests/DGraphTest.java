@@ -1,5 +1,6 @@
 package Tests;
 
+import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.node;
 
@@ -13,6 +14,11 @@ public class DGraphTest {
 
     @org.junit.Test
     public void getEdge() {
+        D.addNode(new node(1));
+        D.addNode(new node(2));
+        D.connect(1,2,0);
+        D.connect(2,1,0);
+        System.out.println(D.getE(2).size());
     }
 
     @org.junit.Test
@@ -33,9 +39,7 @@ public class DGraphTest {
             D.connect(i,i+10,0);
 
         }
-        for(int i=1;i<500;i++){
-            D.removeNode(i);
-        }
+
         System.out.println("number of vertices: "+D.nodeSize() + "  number of edges: " + D.edgeSize());
 
     }

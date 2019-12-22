@@ -12,6 +12,7 @@ public class edge implements edge_data, Serializable {
     public edge(node_data s, node_data d, double w){
         source=(node)s;
         dest= (node)d;
+        weight=w;
     }
 
     public edge(edge e){

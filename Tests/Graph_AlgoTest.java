@@ -65,6 +65,17 @@ public class Graph_AlgoTest {
 
     @Test
     public void shortestPathDist() {
+        DGraph gra=new DGraph();
+        for(int i=1;i<5;i++){
+            gra.addNode(new node(i));
+        }
+        gra.connect(1,2,3);
+        gra.connect(1,3,2);
+        gra.connect(1,4,17);
+        gra.connect(2,4,9);
+        gra.connect(3,4,8);
+        ga.init(gra);
+        System.out.println(ga.shortestPathDist(1,4));
     }
 
     @Test

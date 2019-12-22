@@ -2,6 +2,7 @@ package algorithms;
 import java.io.*;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import dataStructure.*;
 
@@ -107,10 +108,36 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		// TODO Auto-generated method stub
-		return 0;
+		setALLzero(gr);
+		setALLInfinity(gr);
+		PriorityQueue<node> pq=new PriorityQueue<node>(gr.getVertices().size(),new nodeComperator());
+		node s=(node)gr.getVertices().get(src);
+		s.setTag(1);
+		s.setWeight(0);
+		Object[]arr=s.getEdges().keySet().toArray();
+//		for(int i=0;i<arr.length;i++){
+//			double w=s.getEdges().get(arr[i]).getWeight();
+//			edge e=((edge)s.getEdges().get(arr[i]));
+//			e.getDestination().setWeight(Math.min(w,e.getDestination().getWeight()));
+//			pq.add(e.getDestination());
+//		}
+		addPq(pq,arr,s);
+		while(!pq.isEmpty()){
+			node x=pq.poll();
+			Object[]ar=x.getEdges().keySet().toArray();
+			addPq(pq,ar,x);
+		}
+		return gr.getVertices().get(dest).getWeight();
 	}
-
+	public PriorityQueue<node> addPq (PriorityQueue<node> pq,Object[]arr,node n){
+		for(int i=0;i<arr.length;i++){
+			double w=n.getEdges().get(arr[i]).getWeight();
+			edge e=((edge)n.getEdges().get(arr[i]));
+			e.getDestination().setWeight(Math.min(w+n.getWeight(),e.getDestination().getWeight()));
+			pq.add(e.getDestination());
+		}
+		return pq;
+	}
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		// TODO Auto-generated method stub
@@ -159,4 +186,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	public DGraph getGr(){
 	    return gr;
     }
+	public void setALLInfinity(DGraph g){
+		Object [] arr =g.getVertices().keySet().toArray();
+		for(int i=0;i<arr.length;i++){
+			g.getVertices().get(arr[i]).setWeight(Double.MAX_VALUE);
+		}
+	}
 }
