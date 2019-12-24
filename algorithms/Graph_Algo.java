@@ -42,7 +42,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		}
 		return true;
 	}
-	public void DFS (node n){
+	public void DFS (node n){	//change to iterative
 		setALLzero(gr);
 		DFS2(n);
 
@@ -113,7 +113,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			setALLInfinity(gr);
 			PriorityQueue<node> pq = new PriorityQueue<node>(gr.getVertices().size(), new nodeComperator());
 			node s = (node) gr.getVertices().get(src);
-			s.setTag(1);
+			s.setTag(src);	//set tag of source as it's own id
 			s.setWeight(0);
 			Object[] arr=gr.getEdges().get(s.getKey()).keySet().toArray();
 			addPq(pq, arr, s);
@@ -134,15 +134,37 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		for(int i=0;i<arr.length;i++){
 			double w=gr.getEdges().get(n.getKey()).get(arr[i]).getWeight();
 			edge e=(edge)gr.getEdges().get(n.getKey()).get(arr[i]);
-			e.getDestination().setWeight(Math.min(w+n.getWeight(),e.getDestination().getWeight()));
+			if ((w+n.getWeight())<e.getDestination().getWeight()) {
+				e.getDestination().setWeight(w+n.getWeight());
+				e.getDestination().setTag(n.getKey());		//set the tag as the previous node to save the path
+				//e.getDestination().setWeight(Math.min(w + n.getWeight(), e.getDestination().getWeight()));
+			}
 			pq.add(e.getDestination());
 		}
 		return pq;
 	}
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		List<node_data> ans = new ArrayList<node_data>();
-		double PathDis=shortestPathDist(src,dest);
+	List<node_data> ans = new ArrayList<node_data>();
+	Stack<node_data> stk = new Stack<>();				//stack to reverse list elements
+	//if (!isConnected()) return ans;					//try-catch?
+	if (src == dest) {							//path of node to itself returns a single node in list
+			ans.add(gr.getNode(src));
+			return ans;
+		}
+	if (shortestPathDist(src,dest)==Double.MAX_VALUE) return ans;		//no path between nodes
+
+	stk.push(gr.getNode(dest));		//put destination in stack, it will be the last node in list
+	dest=gr.getNode(dest).getTag();	//set next node as previous node (tag from shortest path)
+	while (gr.getNode(dest).getKey()!=src){
+		stk.push(gr.getNode(dest));
+		dest=gr.getNode(dest).getTag();
+	}
+	stk.push(gr.getNode(src));
+	while (!stk.isEmpty())
+		ans.add(stk.pop());
+	return ans;
+	/**	double PathDis=shortestPathDist(src,dest);
 		try{
 			ans.add(gr.getVertices().get(src));
 			if(src==dest) return ans;
@@ -165,7 +187,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return ans;
+		return ans;**/
 	}
 	public void collectPath(Queue temp, node_data n,int dest,double path){
 		Collection<edge_data> edges=gr.getEdges().get(n.getKey()).values();
