@@ -3,7 +3,11 @@ package Tests;
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.node;
+import dataStructure.node_data;
 import org.junit.Test;
+
+import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -71,15 +75,32 @@ public class Graph_AlgoTest {
         }
         gra.connect(1,2,3);
         gra.connect(1,3,2);
-        gra.connect(1,4,17);
-        gra.connect(2,4,9);
-        gra.connect(3,4,8);
+        gra.connect(1,4,7);
+        gra.connect(2,4,3);
+        gra.connect(3,4,5);
         ga.init(gra);
         System.out.println(ga.shortestPathDist(1,4));
     }
 
     @Test
     public void shortestPath() {
+        DGraph gra=new DGraph();
+        for(int i=1;i<5;i++){
+            gra.addNode(new node(i));
+        }
+        gra.connect(1,2,3);
+        gra.connect(1,3,2);
+        gra.connect(1,4,17);
+        gra.connect(2,4,9);
+        gra.connect(3,4,8);
+        ga.init(gra);
+
+        List<node_data> ls=ga.shortestPath(1,4);
+        Iterator iter=ls.iterator();
+        while (iter.hasNext()){
+            node n=(node)iter.next();
+            System.out.print(n.getKey() + " ---> ");
+        }
     }
 
     @Test

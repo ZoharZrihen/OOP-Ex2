@@ -46,6 +46,7 @@ public class DGraphTest {
 
     @org.junit.Test
     public void connect() {
+        D.addNode(new node(1));
     }
 
     @org.junit.Test

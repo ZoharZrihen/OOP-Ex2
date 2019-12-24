@@ -7,16 +7,19 @@ import java.util.HashMap;
 public class DGraph implements graph, Serializable {
 	private static int numOfEdgesG=0;
 	private HashMap<Integer, node_data> vertices;
+	private HashMap<Integer,HashMap<Integer,edge_data>> edges;
     private int numOfVertices;
 	private int ModeCount;
 
 	public DGraph(){
 		numOfVertices=0;
 		vertices=new HashMap<Integer, node_data>();
+		edges=new HashMap<Integer, HashMap<Integer, edge_data>>();
 	}
 	public DGraph(DGraph gr){
 		numOfVertices=gr.nodeSize();
 		vertices=new HashMap<>(gr.getVertices());
+		edges=new HashMap<>(gr.getEdges());
 		ModeCount=0;
 	}
 
@@ -31,8 +34,8 @@ public class DGraph implements graph, Serializable {
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		if(vertices.containsKey(src)&& vertices.containsKey(dest)){
-		    node_data n =vertices.get(src);
-			return ((node)n).getEdge(dest);
+			edge_data e=edges.get(src).get(dest);
+			return e;
 		}
 		else return null;
 	}
@@ -42,6 +45,7 @@ public class DGraph implements graph, Serializable {
 	    node n1= (node) n;
 		if(!vertices.containsKey(n1.getKey())) {
 			vertices.put(n1.getKey(),n1);
+			edges.put(n1.getKey(),new HashMap<Integer, edge_data>());
 			numOfVertices++;
 			ModeCount++;
 		}
@@ -50,8 +54,9 @@ public class DGraph implements graph, Serializable {
 	@Override
 	public void connect(int src, int dest, double w) {
 		try {
-		    //node_data n=vertices.get(src);
-            ((node)vertices.get(src)).getEdges().put(dest, new edge(vertices.get(src), vertices.get(dest), w));
+			edge e=new edge(vertices.get(src),vertices.get(dest),w);
+            edges.get(src).put(dest,e);
+            numOfEdgesG++;
 			ModeCount++;
 		} catch (Exception e) {
 			 e.printStackTrace();
@@ -65,23 +70,28 @@ public class DGraph implements graph, Serializable {
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-	    node_data n=vertices.get(node_id);
-	    return ((node)n).getEdges().values();
+		return edges.get(node_id).values();
 	}
 
 	@Override
 	public node_data removeNode(int key) {
         try {
-            node_data n = vertices.remove(key); //go over all the hash and check if dest removed
+            node_data n = vertices.remove(key);
             numOfVertices--;
             ModeCount++;
             Object[] arr = vertices.keySet().toArray();
             for (int i = 0; i < arr.length; i++) {
-                if (((node) vertices.get(arr[i])).getEdges().get(key) != null) {
-                    ((node) vertices.get(arr[i])).getEdges().remove(key);
-                    ModeCount++;
-                }
+				if(edges.get(arr[i]).get(key)!=null){
+					edges.get(arr[i]).remove(key);
+					numOfEdgesG--;
+				}
             }
+            int sub=0;
+            if(edges.get(key)!=null){
+            	sub=edges.get(key).size();
+			}
+            edges.remove(key);
+            numOfEdgesG-=sub;
             return n;
         } catch(Exception e){
             return null;
@@ -90,7 +100,8 @@ public class DGraph implements graph, Serializable {
 	@Override
 	public edge_data removeEdge(int src, int dest) {
 		try {
-			return ((node)vertices.get(src)).getEdges().remove(dest);
+			numOfEdgesG--;
+			return edges.get(src).remove(dest);
 		}
 		catch (Exception e) {
 			return null;
@@ -104,7 +115,6 @@ public class DGraph implements graph, Serializable {
 
 	@Override
 	public int edgeSize() {
-	    getNumOfEdgesG();
 		return numOfEdgesG;
 	}
 
@@ -117,14 +127,10 @@ public class DGraph implements graph, Serializable {
 	public HashMap<Integer,node_data> getVertices(){
 		return vertices;
 	}
-    public int getNumOfEdgesG(){
-	    numOfEdgesG=0;
-	    Object[] arr=vertices.keySet().toArray();
-	    for(int i=0;i<arr.length;i++){
-            numOfEdgesG+=((node)vertices.get(arr[i])).getEdges().size();
-        }
-	    return numOfEdgesG;
-    }
+	public HashMap<Integer,HashMap<Integer,edge_data>> getEdges(){
+		return edges;
+	}
+
     public String toString(){
         String t="";
 	    Object[] arr=vertices.keySet().toArray();

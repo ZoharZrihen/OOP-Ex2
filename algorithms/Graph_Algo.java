@@ -1,8 +1,11 @@
 package algorithms;
-import java.io.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.*;
 
 import dataStructure.*;
 
@@ -33,7 +36,6 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			 }
 			 setALLzero(gr);
 			 DGraph g1=Transpose(gr);
-		Object[] arr1 = g1.getVertices().keySet().toArray();
 		DFS(((node)g1.getVertices().get(arr[0])));
 		if(CheckForFlag(g1)==false){
 			return false;
@@ -50,14 +52,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	public void DFS2( node n) {
 			if(n.getTag()!=1){
 				n.setTag(1);
-				if(n.getEdges().size()>0){
-					Object []arr=n.getEdges().keySet().toArray();
-					for(int i=0;i<arr.length;i++) {
-						DFS2(((edge) n.getEdges().get(arr[i])).getDestination());
+				if(gr.getEdges().get(n.getKey()).size()>0){
+					Object []arr=gr.getEdges().get(n.getKey()).keySet().toArray();
+					for(int i=0;i<arr.length;i++){
+						DFS2((node)gr.getVertices().get(arr[i]));
 					}
 				}
 				return;
-
 			}
 
 
@@ -65,7 +66,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	public boolean CheckForFlag(DGraph g){
 		Object[] arr=g.getVertices().keySet().toArray();
 		for(int i=0;i<arr.length;i++){
-			if(((node)g.getVertices().get(arr[i])).getTag()==0){
+			if(g.getVertices().get(arr[i]).getTag()==0){
 				return false;
 			}
 		}
@@ -84,20 +85,19 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		DGraph graph =new DGraph(g);
 		Object [] arr=graph.getVertices().keySet().toArray();
 		for(int i=0;i<arr.length;i++){
-			if(((node)graph.getVertices().get(arr[i])).getEdges()!=null){
-				Object [] a=((node)graph.getVertices().get(arr[i])).getEdges().keySet().toArray();
+			if(graph.getEdges().get(arr[i]).size()>0){
+				Object[] a=graph.getEdges().get(arr[i]).keySet().toArray();
 				for(int j=0;j<a.length;j++) {
-					if (((node) graph.getVertices().get(arr[i])).getEdges().get(a[j]).getTag() != 1) {
+					if(graph.getEdges().get(arr[i]).get(a[j]).getTag()!=1){
 						graph.removeEdge((int) arr[i], (int) a[j]);
-						if (((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]) != null){
-							((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]).setTag(1);
+						if(graph.getEdges().get(a[j]).get(arr[i])!=null){
+							graph.getEdges().get(a[j]).get(arr[i]).setTag(1);
 						graph.connect((int) arr[i], (int) a[j], 0);
-						((node) graph.getVertices().get(arr[i])).getEdges().get(a[j]).setTag(1);
-						//graph.connect((int) a[j], (int) arr[i], 0);
+						graph.getEdges().get(arr[i]).get(a[j]).setTag(1);
 					}
 						else{
 							graph.connect((int)a[j],(int)arr[i],0);
-							((node) graph.getVertices().get(a[j])).getEdges().get(arr[i]).setTag(1);
+							graph.getEdges().get(a[j]).get(arr[i]).setTag(1);
 						}
 				}
 				}
@@ -108,31 +108,32 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		setALLzero(gr);
-		setALLInfinity(gr);
-		PriorityQueue<node> pq=new PriorityQueue<node>(gr.getVertices().size(),new nodeComperator());
-		node s=(node)gr.getVertices().get(src);
-		s.setTag(1);
-		s.setWeight(0);
-		Object[]arr=s.getEdges().keySet().toArray();
-//		for(int i=0;i<arr.length;i++){
-//			double w=s.getEdges().get(arr[i]).getWeight();
-//			edge e=((edge)s.getEdges().get(arr[i]));
-//			e.getDestination().setWeight(Math.min(w,e.getDestination().getWeight()));
-//			pq.add(e.getDestination());
-//		}
-		addPq(pq,arr,s);
-		while(!pq.isEmpty()){
-			node x=pq.poll();
-			Object[]ar=x.getEdges().keySet().toArray();
-			addPq(pq,ar,x);
+		try {
+			setALLzero(gr);
+			setALLInfinity(gr);
+			PriorityQueue<node> pq = new PriorityQueue<node>(gr.getVertices().size(), new nodeComperator());
+			node s = (node) gr.getVertices().get(src);
+			s.setTag(1);
+			s.setWeight(0);
+			Object[] arr=gr.getEdges().get(s.getKey()).keySet().toArray();
+			addPq(pq, arr, s);
+			while (!pq.isEmpty()) {
+				node x = pq.poll();
+				Object[] ar=gr.getEdges().get(x.getKey()).keySet().toArray();
+				addPq(pq, ar, x);
+			}
+			return gr.getVertices().get(dest).getWeight();
 		}
-		return gr.getVertices().get(dest).getWeight();
+		catch (Exception e){
+			e.printStackTrace();
+			System.out.println("Error: Invalid src/dest or there is no path between src and dest");
+			return 0;
+		}
 	}
 	public PriorityQueue<node> addPq (PriorityQueue<node> pq,Object[]arr,node n){
 		for(int i=0;i<arr.length;i++){
-			double w=n.getEdges().get(arr[i]).getWeight();
-			edge e=((edge)n.getEdges().get(arr[i]));
+			double w=gr.getEdges().get(n.getKey()).get(arr[i]).getWeight();
+			edge e=(edge)gr.getEdges().get(n.getKey()).get(arr[i]);
 			e.getDestination().setWeight(Math.min(w+n.getWeight(),e.getDestination().getWeight()));
 			pq.add(e.getDestination());
 		}
@@ -140,10 +141,43 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	}
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		List<node_data> ans = new ArrayList<node_data>();
+		double PathDis=shortestPathDist(src,dest);
+		try{
+			ans.add(gr.getVertices().get(src));
+			if(src==dest) return ans;
+			node n= (node) gr.getVertices().get(src);
+			Queue<node_data> temp=new LinkedList<>();
+			collectPath(temp,n,dest,PathDis);
+			if(temp.size()==1){
+				node next=(node)temp.poll();
+				ans.add(next);
+				while(next.getKey()!=dest){
+					collectPath(temp,next,dest,PathDis);
+					 next=(node) temp.poll();
+					 ans.add(next);
+				}
+			}
+			else{
 
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return ans;
+	}
+	public void collectPath(Queue temp, node_data n,int dest,double path){
+		Collection<edge_data> edges=gr.getEdges().get(n.getKey()).values();
+		Iterator iter=edges.iterator();
+		while(iter.hasNext()){
+			edge e= (edge) iter.next();
+			node next=e.getDestination();
+			if(shortestPathDist(next.getKey(),dest)+e.getWeight()==path){
+				temp.add(next);
+			}
+		}
+	}
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		// TODO Auto-generated method stub
