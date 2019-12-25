@@ -145,65 +145,46 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	}
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-	List<node_data> ans = new ArrayList<node_data>();
-	Stack<node_data> stk = new Stack<>();				//stack to reverse list elements
-	//if (!isConnected()) return ans;					//try-catch?
-	if (src == dest) {							//path of node to itself returns a single node in list
+		List<node_data> ans = new ArrayList<node_data>();
+		Stack<node_data> stk = new Stack<>();                //stack to reverse list elements
+		//if (!isConnected()) return ans;					//try-catch?
+		if (src == dest) {                            //path of node to itself returns a single node in list
 			ans.add(gr.getNode(src));
 			return ans;
 		}
-	if (shortestPathDist(src,dest)==Double.MAX_VALUE) return ans;		//no path between nodes
+		if (shortestPathDist(src, dest) == Double.MAX_VALUE) return ans;        //no path between nodes
 
-	stk.push(gr.getNode(dest));		//put destination in stack, it will be the last node in list
-	dest=gr.getNode(dest).getTag();	//set next node as previous node (tag from shortest path)
-	while (gr.getNode(dest).getKey()!=src){
-		stk.push(gr.getNode(dest));
-		dest=gr.getNode(dest).getTag();
-	}
-	stk.push(gr.getNode(src));
-	while (!stk.isEmpty())
-		ans.add(stk.pop());
-	return ans;
-	/**	double PathDis=shortestPathDist(src,dest);
-		try{
-			ans.add(gr.getVertices().get(src));
-			if(src==dest) return ans;
-			node n= (node) gr.getVertices().get(src);
-			Queue<node_data> temp=new LinkedList<>();
-			collectPath(temp,n,dest,PathDis);
-			if(temp.size()==1){
-				node next=(node)temp.poll();
-				ans.add(next);
-				while(next.getKey()!=dest){
-					collectPath(temp,next,dest,PathDis);
-					 next=(node) temp.poll();
-					 ans.add(next);
-				}
-			}
-			else{
-
-			}
+		stk.push(gr.getNode(dest));        //put destination in stack, it will be the last node in list
+		dest = gr.getNode(dest).getTag();    //set next node as previous node (tag from shortest path)
+		while (gr.getNode(dest).getKey() != src) {
+			stk.push(gr.getNode(dest));
+			dest = gr.getNode(dest).getTag();
 		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return ans;**/
-	}
-	public void collectPath(Queue temp, node_data n,int dest,double path){
-		Collection<edge_data> edges=gr.getEdges().get(n.getKey()).values();
-		Iterator iter=edges.iterator();
-		while(iter.hasNext()){
-			edge e= (edge) iter.next();
-			node next=e.getDestination();
-			if(shortestPathDist(next.getKey(),dest)+e.getWeight()==path){
-				temp.add(next);
-			}
-		}
+		stk.push(gr.getNode(src));
+		while (!stk.isEmpty())
+			ans.add(stk.pop());
+		return ans;
 	}
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<node_data> temp=new ArrayList<>();
+		ArrayList<node_data> ans= new ArrayList<>();
+		Iterator<Integer> iter=targets.iterator();
+		while(iter.hasNext()){
+			int key=iter.next();
+			if(gr.getNode(key)==null) return null;
+			temp.add(gr.getNode(key));
+		}
+		for(int i=0;i<temp.size()-1;i++){
+			ArrayList<node_data> temp2= (ArrayList<node_data>) shortestPath(temp.get(i).getKey(),temp.get(i+1).getKey());
+			if(temp2==null)return null;
+			for(int j=0;j<temp2.size();j++){
+				if(!ans.contains(temp2.get(j))){
+					ans.add(temp2.get(j));
+				}
+			}
+		}
+		return ans;
 	}
 
 	@Override

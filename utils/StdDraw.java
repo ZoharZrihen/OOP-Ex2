@@ -717,11 +717,44 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
 		menuBar.add(menu);
+		JMenu menu1 = new JMenu("Algo");
+		menuBar.add(menu1);
+		JMenu menu2 = new JMenu("DGraph");
+		menuBar.add(menu2);
 		JMenuItem menuItem1 = new JMenuItem(" Save...   ");
 		menuItem1.addActionListener(std);
 		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menu.add(menuItem1);
+		JMenuItem menuItem2 = new JMenuItem(" Shortest Path   ");
+		menuItem2.addActionListener(std);
+	//////////////
+		menu1.add(menuItem2);
+		JMenuItem menuItem3 = new JMenuItem(" Is Connected ?   ");
+		menuItem2.addActionListener(std);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu1.add(menuItem3);
+		JMenuItem menuItem4 = new JMenuItem(" Add vertex   ");
+		menuItem2.addActionListener(std);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu2.add(menuItem4);
+		JMenuItem menuItem5 = new JMenuItem(" Remove Vertex   ");
+		menuItem2.addActionListener(std);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu2.add(menuItem5);
+		JMenuItem menuItem6 = new JMenuItem(" Connect edge   ");
+		menuItem2.addActionListener(std);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu2.add(menuItem6);
+		JMenuItem menuItem7 = new JMenuItem(" Remove edge   ");
+		menuItem2.addActionListener(std);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu2.add(menuItem7);
 		return menuBar;
 	}
 
@@ -1654,11 +1687,32 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
-		chooser.setVisible(true);
-		String filename = chooser.getFile();
-		if (filename != null) {
-			StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+		String t=e.getActionCommand();
+		if(t==" Shortest Path   "){
+
+		}
+		if(t==" Is Connected ?   "){
+
+		}
+		if(t==" Add vertex   "){
+
+		}
+		if(t==" Remove Vertex   "){
+
+		}
+		if(t==" Connect edge   "){
+
+		}
+		if(t==" Remove edge   "){
+
+		}
+		else {
+			FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if (filename != null) {
+				StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+			}
 		}
 	}
 

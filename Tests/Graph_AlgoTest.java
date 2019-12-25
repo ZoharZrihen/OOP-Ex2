@@ -99,28 +99,42 @@ public class Graph_AlgoTest {
         //System.out.println(ga.shortestPathDist(1,4));
         List <node_data> ans;
         ans = ga.shortestPath(1,4);
-        int i=9;
-      /**  DGraph gra=new DGraph();
-        for(int i=1;i<5;i++){
-            gra.addNode(new node(i));
-        }
-        gra.connect(1,2,3);
-        gra.connect(1,3,2);
-        gra.connect(1,4,17);
-        gra.connect(2,4,9);
-        gra.connect(3,4,8);
-        ga.init(gra);
-
-        List<node_data> ls=ga.shortestPath(1,4);
-        Iterator iter=ls.iterator();
+        Iterator iter=ans.iterator();
         while (iter.hasNext()){
             node n=(node)iter.next();
             System.out.print(n.getKey() + " ---> ");
-        }**/
+        }
     }
 
     @Test
     public void TSP() {
+        DGraph gra=new DGraph();
+        for(int i=1;i<8;i++){
+            gra.addNode(new node(i));
+        }
+        gra.connect(1,2,3);
+        gra.connect(1,3,2);
+        gra.connect(1,4,7);
+        gra.connect(2,4,3);
+        gra.connect(3,4,5);
+        gra.connect(4,5,3);
+        gra.connect(5,6,3);
+        gra.connect(6,7,3);
+        gra.connect(2,6,3);
+        ga.init(gra);
+        List<Integer> targets=new ArrayList<>();
+        targets.add(1);
+       // targets.add(3);
+       // targets.add(4);
+      //  targets.add(6);
+        targets.add(7);
+        ArrayList<node_data> ans= (ArrayList<node_data>) ga.TSP(targets);
+        Iterator iter=ans.iterator();
+        while (iter.hasNext()){
+            node n=(node)iter.next();
+            System.out.print(n.getKey() + " ---> ");
+        }
+
     }
 
     @Test
