@@ -65,15 +65,21 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
+
+import algorithms.Graph_Algo;
+import dataStructure.DGraph;
+import dataStructure.edge;
+import dataStructure.edge_data;
+import dataStructure.graph;
+import dataStructure.node;
+import dataStructure.node_data;
+import utils.Point3D;
+import utils.Range;
+import gui.Graph_Gui;
 
 /**
  *  The {@code StdDraw} class provides a basic capability for
@@ -569,6 +575,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 */
 	public static final Color PRINCETON_ORANGE = new Color(245, 128, 37);
 
+	private static DGraph gr=new DGraph();
+
 	// default colors
 	private static final Color DEFAULT_PEN_COLOR   = BLACK;
 	private static final Color DEFAULT_CLEAR_COLOR = WHITE;
@@ -650,6 +658,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		setCanvasSize(DEFAULT_SIZE, DEFAULT_SIZE);
 	}
 
+
 	/**
 	 * Sets the canvas (drawing area) to be <em>width</em>-by-<em>height</em> pixels.
 	 * This also erases the current drawing and resets the coordinate system,
@@ -711,6 +720,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		frame.requestFocusInWindow();
 		frame.setVisible(true);
 	}
+	public static void setgraph(DGraph g){
+		gr=new DGraph(g);
+	}
 
 	// create the menu bar (changed to private)
 	private static JMenuBar createMenuBar() {
@@ -726,34 +738,26 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menu.add(menuItem1);
+		JMenuItem menuItem10 = new JMenuItem(" Load...   ");
+		menuItem10.addActionListener((std));
+		menu.add(menuItem10);
 		JMenuItem menuItem2 = new JMenuItem(" Shortest Path   ");
 		menuItem2.addActionListener(std);
-	//////////////
 		menu1.add(menuItem2);
 		JMenuItem menuItem3 = new JMenuItem(" Is Connected ?   ");
-		menuItem2.addActionListener(std);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuItem3.addActionListener(std);
 		menu1.add(menuItem3);
 		JMenuItem menuItem4 = new JMenuItem(" Add vertex   ");
-		menuItem2.addActionListener(std);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuItem4.addActionListener(std);
 		menu2.add(menuItem4);
 		JMenuItem menuItem5 = new JMenuItem(" Remove Vertex   ");
-		menuItem2.addActionListener(std);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuItem5.addActionListener(std);
 		menu2.add(menuItem5);
 		JMenuItem menuItem6 = new JMenuItem(" Connect edge   ");
-		menuItem2.addActionListener(std);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuItem6.addActionListener(std);
 		menu2.add(menuItem6);
 		JMenuItem menuItem7 = new JMenuItem(" Remove edge   ");
-		menuItem2.addActionListener(std);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menuItem7.addActionListener(std);
 		menu2.add(menuItem7);
 		return menuBar;
 	}
@@ -1688,25 +1692,74 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String t=e.getActionCommand();
-		if(t==" Shortest Path   "){
+		if(t.equals(" Load...   ")){
+			FileDialog chooser = new FileDialog(StdDraw.frame, "Choose graph file to load", FileDialog.LOAD);
+			chooser.setDirectory("C:\\");
+			chooser.setFile("*.txt");
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if (filename == null)
+				System.out.println("You cancelled the choice");
+			else
+				System.out.println("You chose " + filename);
+			Graph_Algo ga=new Graph_Algo();
+			ga.init(filename);
+			Graph_Gui gg=new Graph_Gui(ga.getGr());
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),ga.getGr());
+		}
+		if(t.equals(" Shortest Path   ")){
 
 		}
-		if(t==" Is Connected ?   "){
+		if(t.equals(" Is Connected ?   ")) {
+			Graph_Algo ga = new Graph_Algo();
+			ga.init(gr);
+			boolean ans = ga.isConnected();
+			if (ans) {
+				StdDraw.setPenColor(Color.BLUE);
+				StdDraw.setPenRadius(0.5);
+				StdDraw.text(10, 50, "It is connected!");
+
+			}
+			if (!ans) {
+				StdDraw.setPenColor(Color.RED);
+				StdDraw.setPenRadius(0.5);
+				StdDraw.text(10, 50, "It is NOT connected");
+
+
+			}
+		}
+		if(t.equals(" Add vertex   ")){
+			int key =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter vertex id: "));
+			double x=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter x point location"));
+			double y=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter y point location"));
+			gr.addNode(new node(key,new Point3D(x,y,0),0));
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 
 		}
-		if(t==" Add vertex   "){
+		if(t.equals(" Remove Vertex   ")){
+			int key =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter vertex id to remove "));
+			gr.removeNode(key);
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+		}
+		if(t.equals(" Connect edge   ")){
+			int src =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter vertex source id: "));
+			int dest =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter vertex destination id:  "));
+			double w =Double.parseDouble(JOptionPane.showInputDialog(null,"Enter weight for the edge:  "));
+			gr.connect(src,dest,w);
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+		}
+		if(t.equals(" Remove edge   ")){
+			int src =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter edge source id: "));
+			int dest =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter edge destination id:  "));
+			gr.removeEdge(src,dest);
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 
 		}
-		if(t==" Remove Vertex   "){
-
-		}
-		if(t==" Connect edge   "){
-
-		}
-		if(t==" Remove edge   "){
-
-		}
-		else {
+		if(t.equals("  save ...")){
 			FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
 			chooser.setVisible(true);
 			String filename = chooser.getFile();
