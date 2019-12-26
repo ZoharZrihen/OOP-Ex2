@@ -121,6 +121,7 @@ public class Graph_AlgoTest {
         gra.connect(5,6,3);
         gra.connect(6,7,3);
         gra.connect(2,6,3);
+        gra.connect(7,1,3);
         ga.init(gra);
         List<Integer> targets=new ArrayList<>();
         targets.add(1);

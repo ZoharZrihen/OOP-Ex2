@@ -10,11 +10,11 @@ import java.util.*;
 import dataStructure.*;
 
 public class Graph_Algo implements graph_algorithms, Serializable {
-		private DGraph gr=new DGraph();
+	private DGraph gr = new DGraph();
 
 	@Override
 	public void init(graph g) {
-		gr=new DGraph((DGraph) g);
+		gr = new DGraph((DGraph) g);
 	}
 
 	@Override
@@ -30,43 +30,45 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	@Override
 	public boolean isConnected() {
 		Object[] arr = gr.getVertices().keySet().toArray();
-			DFS(((node)gr.getVertices().get(arr[0])));
-			 if(CheckForFlag(gr)==false){
-			 	return false;
-			 }
-			 setALLzero(gr);
-			 DGraph g1=Transpose(gr);
-		DFS(((node)g1.getVertices().get(arr[0])));
-		if(CheckForFlag(g1)==false){
+		DFS(((node) gr.getVertices().get(arr[0])));
+		if (CheckForFlag(gr) == false) {
+			return false;
+		}
+		setALLzero(gr);
+		DGraph g1 = Transpose(gr);
+		DFS(((node) g1.getVertices().get(arr[0])));
+		if (CheckForFlag(g1) == false) {
 			return false;
 		}
 		return true;
 	}
-	public void DFS (node n){	//change to iterative
+
+	public void DFS(node n) {    //change to iterative
 		setALLzero(gr);
 		DFS2(n);
 
+	}
+
+
+	public void DFS2(node n) {
+		if (n.getTag() != 1) {
+			n.setTag(1);
+			if (gr.getEdges().get(n.getKey()).size() > 0) {
+				Object[] arr = gr.getEdges().get(n.getKey()).keySet().toArray();
+				for (int i = 0; i < arr.length; i++) {
+					DFS2((node) gr.getVertices().get(arr[i]));
+				}
+			}
+			return;
 		}
 
 
-	public void DFS2( node n) {
-			if(n.getTag()!=1){
-				n.setTag(1);
-				if(gr.getEdges().get(n.getKey()).size()>0){
-					Object []arr=gr.getEdges().get(n.getKey()).keySet().toArray();
-					for(int i=0;i<arr.length;i++){
-						DFS2((node)gr.getVertices().get(arr[i]));
-					}
-				}
-				return;
-			}
-
-
 	}
-	public boolean CheckForFlag(DGraph g){
-		Object[] arr=g.getVertices().keySet().toArray();
-		for(int i=0;i<arr.length;i++){
-			if(g.getVertices().get(arr[i]).getTag()==0){
+
+	public boolean CheckForFlag(DGraph g) {
+		Object[] arr = g.getVertices().keySet().toArray();
+		for (int i = 0; i < arr.length; i++) {
+			if (g.getVertices().get(arr[i]).getTag() == 0) {
 				return false;
 			}
 		}
@@ -74,32 +76,31 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	}
 
 
-	public void setALLzero(DGraph g){
-		Object [] arr =g.getVertices().keySet().toArray();
-		for(int i=0;i<arr.length;i++){
+	public void setALLzero(DGraph g) {
+		Object[] arr = g.getVertices().keySet().toArray();
+		for (int i = 0; i < arr.length; i++) {
 			g.getVertices().get(arr[i]).setTag(0);
 		}
 	}
 
-	public DGraph Transpose(DGraph g){
-		DGraph graph =new DGraph(g);
-		Object [] arr=graph.getVertices().keySet().toArray();
-		for(int i=0;i<arr.length;i++){
-			if(graph.getEdges().get(arr[i]).size()>0){
-				Object[] a=graph.getEdges().get(arr[i]).keySet().toArray();
-				for(int j=0;j<a.length;j++) {
-					if(graph.getEdges().get(arr[i]).get(a[j]).getTag()!=1){
+	public DGraph Transpose(DGraph g) {
+		DGraph graph = new DGraph(g);
+		Object[] arr = graph.getVertices().keySet().toArray();
+		for (int i = 0; i < arr.length; i++) {
+			if (graph.getEdges().get(arr[i]).size() > 0) {
+				Object[] a = graph.getEdges().get(arr[i]).keySet().toArray();
+				for (int j = 0; j < a.length; j++) {
+					if (graph.getEdges().get(arr[i]).get(a[j]).getTag() != 1) {
 						graph.removeEdge((int) arr[i], (int) a[j]);
-						if(graph.getEdges().get(a[j]).get(arr[i])!=null){
+						if (graph.getEdges().get(a[j]).get(arr[i]) != null) {
 							graph.getEdges().get(a[j]).get(arr[i]).setTag(1);
-						graph.connect((int) arr[i], (int) a[j], 0);
-						graph.getEdges().get(arr[i]).get(a[j]).setTag(1);
-					}
-						else{
-							graph.connect((int)a[j],(int)arr[i],0);
+							graph.connect((int) arr[i], (int) a[j], 0);
+							graph.getEdges().get(arr[i]).get(a[j]).setTag(1);
+						} else {
+							graph.connect((int) a[j], (int) arr[i], 0);
 							graph.getEdges().get(a[j]).get(arr[i]).setTag(1);
 						}
-				}
+					}
 				}
 			}
 		}
@@ -113,36 +114,42 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			setALLInfinity(gr);
 			PriorityQueue<node> pq = new PriorityQueue<node>(gr.getVertices().size(), new nodeComperator());
 			node s = (node) gr.getVertices().get(src);
-			s.setTag(src);	//set tag of source as it's own id
+			s.setTag(src);    //set tag of source as it's own id
 			s.setWeight(0);
-			Object[] arr=gr.getEdges().get(s.getKey()).keySet().toArray();
+			Object[] arr = gr.getEdges().get(s.getKey()).keySet().toArray();
 			addPq(pq, arr, s);
-			while (!pq.isEmpty()) {
+			boolean visited=true;
+			while (!pq.isEmpty()&&visited) {
 				node x = pq.poll();
-				Object[] ar=gr.getEdges().get(x.getKey()).keySet().toArray();
+				if(x.getInfo().equals("visited")){
+					break;
+				}
+				x.setInfo("visited");
+				Object[] ar = gr.getEdges().get(x.getKey()).keySet().toArray();
 				addPq(pq, ar, x);
 			}
 			return gr.getVertices().get(dest).getWeight();
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error: Invalid src/dest or there is no path between src and dest");
 			return 0;
 		}
 	}
-	public PriorityQueue<node> addPq (PriorityQueue<node> pq,Object[]arr,node n){
-		for(int i=0;i<arr.length;i++){
-			double w=gr.getEdges().get(n.getKey()).get(arr[i]).getWeight();
-			edge e=(edge)gr.getEdges().get(n.getKey()).get(arr[i]);
-			if ((w+n.getWeight())<e.getDestination().getWeight()) {
-				e.getDestination().setWeight(w+n.getWeight());
-				e.getDestination().setTag(n.getKey());		//set the tag as the previous node to save the path
+
+	public PriorityQueue<node> addPq(PriorityQueue<node> pq, Object[] arr, node n) {
+		for (int i = 0; i < arr.length; i++) {
+			double w = gr.getEdges().get(n.getKey()).get(arr[i]).getWeight();
+			edge e = (edge) gr.getEdges().get(n.getKey()).get(arr[i]);
+			if ((w + n.getWeight()) < e.getDestination().getWeight()) {
+				e.getDestination().setWeight(w + n.getWeight());
+				e.getDestination().setTag(n.getKey());        //set the tag as the previous node to save the path
 				//e.getDestination().setWeight(Math.min(w + n.getWeight(), e.getDestination().getWeight()));
 			}
 			pq.add(e.getDestination());
 		}
 		return pq;
 	}
+
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> ans = new ArrayList<node_data>();
@@ -165,6 +172,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			ans.add(stk.pop());
 		return ans;
 	}
+
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		ArrayList<node_data> temp=new ArrayList<>();
@@ -177,16 +185,22 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		}
 		for(int i=0;i<temp.size()-1;i++){
 			ArrayList<node_data> temp2= (ArrayList<node_data>) shortestPath(temp.get(i).getKey(),temp.get(i+1).getKey());
-			if(temp2==null)return null;
+			if(temp2.isEmpty())return null;
 			for(int j=0;j<temp2.size();j++){
 				if(!ans.contains(temp2.get(j))){
 					ans.add(temp2.get(j));
 				}
 			}
 		}
+		ArrayList<node_data> temp2= (ArrayList<node_data>) shortestPath(temp.get(temp.size()-1).getKey(),temp.get(0).getKey());
+		if(temp2.isEmpty())return null;
+		for(int j=0;j<temp2.size();j++){
+			if(!ans.contains(temp2.get(j))){
+				ans.add(temp2.get(j));
+			}
+		}
 		return ans;
 	}
-
 	@Override
 	public graph copy() {
 		DGraph g=new DGraph(this.gr);

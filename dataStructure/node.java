@@ -16,14 +16,14 @@ public class node implements node_data, Serializable {
         key=0;
         location=new Point3D(0,0,0);
         weight=0;
-        info=null;
+        info="";
         tag=0;
     }
     public node(int k){
         key=k;
         location=new Point3D(0,0,0);
         weight=0;
-        info=null;
+        info="";
         tag=0;
     }
 
@@ -31,7 +31,7 @@ public class node implements node_data, Serializable {
         key=k;
         location=new Point3D(p);
         weight=w;
-        info=null;
+        info="";
         tag=0;
     }
     public node(node n){

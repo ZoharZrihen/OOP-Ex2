@@ -18,14 +18,16 @@ public class Graph_Gui {
 
     public static void main(String[] args) {
         Graph_Gui gg = new Graph_Gui();
-        gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+        //gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
         DGraph g=new DGraph();
         g.addNode(new node(1,new Point3D(20,20,0),0));
         g.addNode(new node(2,new Point3D(30,30,0),0));
         g.connect(1,2,5);
         g.connect(2,1,3);
         Graph_Gui g1=new Graph_Gui(g);
-    //    g1.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),g1.getGr());
+        DGraph g11=new DGraph();
+        Graph_Gui gg2=new Graph_Gui(g11);
+        gg2.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg2.getGr());
     }
 
     public Graph_Gui() {
@@ -37,7 +39,9 @@ public class Graph_Gui {
         gr = new DGraph((DGraph) g);
     }
 
+    public void repaint(){
 
+    }
     public void DrawGraph(int w, int h, Range rx, Range ry, DGraph g) {
         StdDraw.setgraph(g);
         StdDraw.setCanvasSize(w, h);
@@ -83,6 +87,7 @@ public class Graph_Gui {
         }
         return gr;
     }
+
     public DGraph getGr(){
         return (DGraph) gr;
     }

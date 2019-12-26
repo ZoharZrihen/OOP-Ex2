@@ -62,9 +62,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.LinkedList;
-import java.util.TreeSet;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 
@@ -744,6 +742,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenuItem menuItem2 = new JMenuItem(" Shortest Path   ");
 		menuItem2.addActionListener(std);
 		menu1.add(menuItem2);
+		JMenuItem menuItem22=new JMenuItem("    TSP     ");
+		menuItem22.addActionListener(std);
+		menu1.add(menuItem22);
 		JMenuItem menuItem3 = new JMenuItem(" Is Connected ?   ");
 		menuItem3.addActionListener(std);
 		menu1.add(menuItem3);
@@ -1708,7 +1709,23 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),ga.getGr());
 		}
 		if(t.equals(" Shortest Path   ")){
-
+			int src =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter starting vertex id: "));
+			int dest =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter ending vertex id: "));
+			Graph_Algo ga = new Graph_Algo();
+			ga.init(gr);
+			Collection<node_data> path=ga.shortestPath(src,dest);
+			StdDraw.setPenColor(Color.BLUE);
+			StdDraw.setPenRadius(0.5);
+			Iterator iter=path.iterator();
+			int i=0;
+			while(iter.hasNext()){
+				node_data n= (node_data) iter.next();
+				int key=n.getKey();
+				String t1=Integer.toString(key);
+				t1+=" ---> ";
+				StdDraw.text(10+i,50,t1);
+				i+=3;
+			}
 		}
 		if(t.equals(" Is Connected ?   ")) {
 			Graph_Algo ga = new Graph_Algo();
@@ -1757,6 +1774,30 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			gr.removeEdge(src,dest);
 			Graph_Gui gg=new Graph_Gui(gr);
 			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+
+		}
+		if(t.equals("    TSP     ")){
+			List<Integer> targets=new ArrayList<>();
+			int key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
+			while(key!=999){
+				targets.add(key);
+				 key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
+			}
+			Graph_Algo ga = new Graph_Algo();
+			ga.init(gr);
+			ArrayList<node_data> ans= (ArrayList<node_data>) ga.TSP(targets);
+			StdDraw.setPenColor(Color.BLUE);
+			StdDraw.setPenRadius(0.5);
+			Iterator iter=ans.iterator();
+			int i=0;
+			while(iter.hasNext()){
+				node_data n= (node_data) iter.next();
+				int k=n.getKey();
+				String t1=Integer.toString(k);
+				t1+=" ---> ";
+				StdDraw.text(10+i,50,t1);
+				i+=3;
+			}
 
 		}
 		if(t.equals("  save ...")){
