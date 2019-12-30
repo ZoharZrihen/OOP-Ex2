@@ -39,9 +39,6 @@ public class Graph_Gui {
         gr = new DGraph((DGraph) g);
     }
 
-    public void repaint(){
-
-    }
     public void DrawGraph(int w, int h, Range rx, Range ry, DGraph g) {
         StdDraw.setgraph(g);
         StdDraw.setCanvasSize(w, h);

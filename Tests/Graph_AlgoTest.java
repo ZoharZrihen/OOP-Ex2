@@ -17,13 +17,12 @@ public class Graph_AlgoTest {
 
     @Test
     public void init() {
-
-
-
-    }
-
-    @Test
-    public void testInit() {
+        DGraph g=new DGraph();
+        g.addNode(new node(1));
+        g.addNode(new node(2));
+        g.connect(1,2,4);
+        ga.init(g);
+        assertEquals(ga.getGr().toString(),g.toString());
     }
 
     @Test
@@ -140,5 +139,19 @@ public class Graph_AlgoTest {
 
     @Test
     public void copy() {
+        DGraph gra=new DGraph();
+        for(int i=1;i<6;i++){
+            gra.addNode(new node(i));
+        }
+        gra.connect(1,2,3);
+        gra.connect(1,3,2);
+        gra.connect(1,4,7);
+        gra.connect(2,4,3);
+        gra.connect(3,4,5);
+        ga.init(gra);
+        DGraph copy= (DGraph) ga.copy();
+        assertEquals(copy.toString(),ga.getGr().toString());
+        ga.getGr().removeNode(1);
+        assertNotEquals(copy.toString(),ga.getGr().toString());
     }
 }

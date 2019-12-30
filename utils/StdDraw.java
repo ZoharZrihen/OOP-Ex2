@@ -63,6 +63,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 
@@ -1709,6 +1710,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),ga.getGr());
 		}
 		if(t.equals(" Shortest Path   ")){
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 			int src =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter starting vertex id: "));
 			int dest =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter ending vertex id: "));
 			Graph_Algo ga = new Graph_Algo();
@@ -1728,6 +1731,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			}
 		}
 		if(t.equals(" Is Connected ?   ")) {
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 			Graph_Algo ga = new Graph_Algo();
 			ga.init(gr);
 			boolean ans = ga.isConnected();
@@ -1777,6 +1782,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 		}
 		if(t.equals("    TSP     ")){
+			Graph_Gui gg=new Graph_Gui(gr);
+			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 			List<Integer> targets=new ArrayList<>();
 			int key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
 			while(key!=999){
@@ -1800,11 +1807,14 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			}
 
 		}
-		if(t.equals("  save ...")){
-			FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+		if(t.equals(" Save...   ")){
+			FileDialog chooser = new FileDialog(StdDraw.frame, "Choose where to save your graph", FileDialog.SAVE);
 			chooser.setVisible(true);
 			String filename = chooser.getFile();
 			if (filename != null) {
+				Graph_Algo g=new Graph_Algo();
+				g.init(gr);
+				g.save(filename);
 				StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
 			}
 		}

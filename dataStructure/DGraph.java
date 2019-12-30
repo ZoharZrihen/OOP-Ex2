@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class DGraph implements graph, Serializable {
-	private static int numOfEdgesG=0;
+	private  int numOfEdgesG=0;
 	private HashMap<Integer, node_data> vertices;
 	private HashMap<Integer,HashMap<Integer,edge_data>> edges;
     private int numOfVertices;
@@ -101,6 +101,7 @@ public class DGraph implements graph, Serializable {
 	public edge_data removeEdge(int src, int dest) {
 		try {
 			numOfEdgesG--;
+			ModeCount++;
 			return edges.get(src).remove(dest);
 		}
 		catch (Exception e) {
