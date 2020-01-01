@@ -8,55 +8,102 @@ import java.io.Serializable;
 import java.util.*;
 
 import dataStructure.*;
-
+/**
+ * This class represents the "regular" Graph Theory algorithms including:
+ * 0. clone();
+ * 1. init(String file_name);
+ * 2. save(String file_name);
+ * 3. isConnected();
+ * 5. double shortestPathDist(int src, int dest);
+ * 6. List<Node> shortestPath(int src, int dest);
+ *
+ */
 public class Graph_Algo implements graph_algorithms, Serializable {
 	private DGraph gr = new DGraph();
 
+	public Graph_Algo(graph graph) {
+		gr=new DGraph((DGraph) graph);
+	}
+
+	public Graph_Algo() {
+		gr=new DGraph();
+	}
+
+	/**
+	 * Init this set of algorithms on the parameter - graph.
+	 * @param g the new graph of this object.
+	 */
 	@Override
 	public void init(graph g) {
 		gr = new DGraph((DGraph) g);
 	}
-
+	/**
+	 * Init a graph from serializable file
+	 * @param file_name
+	 */
 	@Override
 	public void init(String file_name) {
 		deserialize(file_name);
 	}
-
+	/**
+	 * saves a graph to serializable file
+	 * @param file_name
+	 */
 	@Override
 	public void save(String file_name) {
 		serialize(file_name);
 	}
-
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node.
+	 * implementation:
+	 * 1. take any node.
+	 * 2. check if from this node i can get to all other nodes.
+	 * 3. transpose the graph (remove all edges and connect it opposite.
+	 * 4. take the same node again.
+	 * 5. check number 2 again.
+	 * 6. if still true, graph is connected.
+	 * @return true\false if graph is connected.
+	 */
 	@Override
 	public boolean isConnected() {
-		Object[] arr = gr.getVertices().keySet().toArray();
-		DFS(((node) gr.getVertices().get(arr[0])));
-		if (CheckForFlag(gr) == false) {
+		DGraph copy= (DGraph) gr.copy();
+		Object[] arr = copy.getVertices().keySet().toArray();
+		DFS(((node) copy.getVertices().get(arr[0])),copy);
+		if (CheckForFlag(copy) == false) {
 			return false;
+
 		}
-		setALLzero(gr);
-		DGraph g1 = Transpose(gr);
-		DFS(((node) g1.getVertices().get(arr[0])));
+		setALLzero(copy);
+		DGraph g1 = Transpose(copy);
+		DFS(((node) g1.getVertices().get(arr[0])),copy);
 		if (CheckForFlag(g1) == false) {
 			return false;
 		}
 		return true;
 	}
 
-	public void DFS(node n) {    //change to iterative
-		setALLzero(gr);
-		DFS2(n);
+	/**
+	 * searching in DFS method. took the idea from here https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
+	 * @param n the node to start to search with.
+	 */
+	private void DFS(node n, DGraph copy) {    //change to iterative
+		setALLzero(copy);
+		DFS2(n,copy);
 
 	}
 
-
-	public void DFS2(node n) {
+	/**
+	 * recursive function to implement the dfs search.
+	 * @param n the node to start to search with.
+	 */
+	private void DFS2(node n,DGraph copy) {
 		if (n.getTag() != 1) {
 			n.setTag(1);
-			if (gr.getEdges().get(n.getKey()).size() > 0) {
-				Object[] arr = gr.getEdges().get(n.getKey()).keySet().toArray();
+			if (copy.getEdges().get(n.getKey()).size() > 0) {
+				Object[] arr = copy.getEdges().get(n.getKey()).keySet().toArray();
 				for (int i = 0; i < arr.length; i++) {
-					DFS2((node) gr.getVertices().get(arr[i]));
+					DFS2((node) copy.getVertices().get(arr[i]),copy);
 				}
 			}
 			return;
@@ -65,7 +112,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 
 	}
 
-	public boolean CheckForFlag(DGraph g) {
+	/**
+	 * simple function to check all tags for the graph.
+	 * @param g the graph to check
+	 * @return true if all tags marked as visited (1), false if there is at least one node with tag=0.
+	 */
+	private boolean CheckForFlag(DGraph g) {
 		Object[] arr = g.getVertices().keySet().toArray();
 		for (int i = 0; i < arr.length; i++) {
 			if (g.getVertices().get(arr[i]).getTag() == 0) {
@@ -75,15 +127,23 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		return true;
 	}
 
-
-	public void setALLzero(DGraph g) {
+	/**
+	 * simple function to go over all the nodes of the graph and set tag to 0.
+	 * @param g the graph to set tags zero.
+	 */
+	private void setALLzero(DGraph g) {
 		Object[] arr = g.getVertices().keySet().toArray();
 		for (int i = 0; i < arr.length; i++) {
 			g.getVertices().get(arr[i]).setTag(0);
 		}
 	}
 
-	public DGraph Transpose(DGraph g) {
+	/**
+	 * function to remove all edges and connect it back opposite.
+	 * @param g graph to change
+	 * @return same graph, opposite direction for the edges.
+	 */
+	private DGraph Transpose(DGraph g) {
 		DGraph graph = new DGraph(g);
 		Object[] arr = graph.getVertices().keySet().toArray();
 		for (int i = 0; i < arr.length; i++) {
@@ -105,8 +165,14 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			}
 		}
 		return graph;
-	}
-
+	} // function to remove all edges and connect it back opposite.
+	/**
+	 * returns the length of the shortest path between src to dest
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 *  if src\dest are wrong, throws exception.
+	 * @return the distance between src node to dest node.
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		try {
@@ -136,7 +202,14 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		}
 	}
 
-	public PriorityQueue<node> addPq(PriorityQueue<node> pq, Object[] arr, node n) {
+	/**
+	 * This function implements the Dkjistra algorithm as it is.
+	 * @param pq the priority queue to add all the nodes to.
+	 * @param arr array of values to to insert to the queue.
+	 * @param n
+	 * @return the priority queue.
+	 */
+	private PriorityQueue<node> addPq(PriorityQueue<node> pq, Object[] arr, node n) {
 		for (int i = 0; i < arr.length; i++) {
 			double w = gr.getEdges().get(n.getKey()).get(arr[i]).getWeight();
 			edge e = (edge) gr.getEdges().get(n.getKey()).get(arr[i]);
@@ -149,7 +222,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		}
 		return pq;
 	}
-
+	/**
+ 	* returns the the shortest path between src to dest - as an ordered List of nodes:
+ 	* src--> n1-->n2-->...dest
+ 	* * @param src - start node
+ 	* @param dest - end (target) node
+ 	* @return List of the path,empty if no path.
+			 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> ans = new ArrayList<node_data>();
@@ -172,7 +251,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			ans.add(stk.pop());
 		return ans;
 	}
-
+	/**
+	 * computes a relatively short path which visit each node in the targets List.
+	 * if there is full connectivity between the targets, computes a path of the targets
+	 * @param targets - list of the nodes for the path.
+	 * @return the nodes ordered by the path between them, null if none or there isnt full connectivity.
+	 */
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		ArrayList<node_data> temp=new ArrayList<>();
@@ -201,13 +285,23 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 		}
 		return ans;
 	}
+
+	/**
+	 * this funtion makes a deep copy to a graph by using the copy constructor of DGraph.
+	 * @return new copied graph g.
+	 */
 	@Override
 	public graph copy() {
-		DGraph g=new DGraph(this.gr);
+		DGraph g= (DGraph) gr.copy();
 		return g;
 
 
 	}
+
+	/**
+	 * this function saves a graph in a file, using serializable, writing it as an object.
+	 * @param file_name to name of the file of the saved graph.
+	 */
 	private void serialize(String file_name){
 		try {
 			FileOutputStream file = new FileOutputStream(file_name);
@@ -219,6 +313,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 			System.out.println("Error: can't save this graph to file, check again.");
 		}
 	}
+	/**
+	 * this function inits a graph from a file, using serializable, init it from an object.
+	 * @param file_name to name of the file of the saved graph.
+	 */
 	private  void deserialize(String file_name) {
 		gr=new DGraph();
 		try {
@@ -237,7 +335,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	public DGraph getGr(){
 	    return gr;
     }
-	public void setALLInfinity(DGraph g){
+
+	/**
+	 * this function sets weight of all the nodes to infinty.
+	 * the use of this function is for Dkjistra algorithm.
+	 * @param g
+	 */
+	private void setALLInfinity(DGraph g){
 		Object [] arr =g.getVertices().keySet().toArray();
 		for(int i=0;i<arr.length;i++){
 			g.getVertices().get(arr[i]).setWeight(Double.MAX_VALUE);

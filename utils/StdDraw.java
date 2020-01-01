@@ -1230,7 +1230,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 
 	/**
-	 * Draws a polygon with the vertices 
+	 * Draws a polygon with the vertices
 	 * (<em>x</em><sub>0</sub>, <em>y</em><sub>0</sub>),
 	 * (<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>), ...,
 	 * (<em>x</em><sub><em>n</em>–1</sub>, <em>y</em><sub><em>n</em>–1</sub>).
@@ -1259,7 +1259,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	/**
-	 * Draws a polygon with the vertices 
+	 * Draws a polygon with the vertices
 	 * (<em>x</em><sub>0</sub>, <em>y</em><sub>0</sub>),
 	 * (<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>), ...,
 	 * (<em>x</em><sub><em>n</em>–1</sub>, <em>y</em><sub><em>n</em>–1</sub>).
@@ -1336,33 +1336,30 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	/*
     private static BufferedImage getImage(String filename) {
         if (filename == null) throw new IllegalArgumentException();
-
         // from a file or URL
         try {
             URL url = new URL(filename);
             BufferedImage image = ImageIO.read(url);
             return image;
-        } 
+        }
         catch (IOException e) {
             // ignore
         }
-
         // in case file is inside a .jar (classpath relative to StdDraw)
         try {
             URL url = StdDraw.class.getResource(filename);
             BufferedImage image = ImageIO.read(url);
             return image;
-        } 
+        }
         catch (IOException e) {
             // ignore
         }
-
         // in case file is inside a .jar (classpath relative to root of jar)
         try {
             URL url = StdDraw.class.getResource("/" + filename);
             BufferedImage image = ImageIO.read(url);
             return image;
-        } 
+        }
         catch (IOException e) {
             // ignore
         }
@@ -1616,7 +1613,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	/**
-	 * Enable double buffering. All subsequent calls to 
+	 * Enable double buffering. All subsequent calls to
 	 * drawing methods such as {@code line()}, {@code circle()},
 	 * and {@code square()} will be deffered until the next call
 	 * to show(). Useful for animations.
@@ -1626,7 +1623,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	/**
-	 * Disable double buffering. All subsequent calls to 
+	 * Disable double buffering. All subsequent calls to
 	 * drawing methods such as {@code line()}, {@code circle()},
 	 * and {@code square()} will be displayed on screen when called.
 	 * This is the default.
@@ -1731,8 +1728,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			}
 		}
 		if(t.equals(" Is Connected ?   ")) {
-			Graph_Gui gg=new Graph_Gui(gr);
-			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+			//Graph_Gui gg=new Graph_Gui(gr);
+			//gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 			Graph_Algo ga = new Graph_Algo();
 			ga.init(gr);
 			boolean ans = ga.isConnected();
@@ -1754,7 +1751,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			int key =Integer.parseInt(JOptionPane.showInputDialog(null,"Enter vertex id: "));
 			double x=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter x point location"));
 			double y=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter y point location"));
-			gr.addNode(new node(key,new Point3D(x,y,0),0));
+			gr.addNode(new node(key,new Point3D(x,y,0)));
 			Graph_Gui gg=new Graph_Gui(gr);
 			gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
 
@@ -1788,7 +1785,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			int key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
 			while(key!=999){
 				targets.add(key);
-				 key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
+				key=Integer.parseInt(JOptionPane.showInputDialog(null,"Enter node id for the list (Enter 999 when done) "));
 			}
 			Graph_Algo ga = new Graph_Algo();
 			ga.init(gr);

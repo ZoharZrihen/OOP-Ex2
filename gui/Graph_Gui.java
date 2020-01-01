@@ -13,15 +13,22 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * this class represent a GUI for the graph, you can use it to draw random graph
+ * or a graph of your own.
+ * The gui is an extension of StdDraw library.
+ * you can use the gui to draw a graph and use algorithms on it.
+ * @authors Zohar Zrihen and Arthur Boltak.
+ */
 public class Graph_Gui {
     private graph gr;
 
     public static void main(String[] args) {
         Graph_Gui gg = new Graph_Gui();
-        //gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
+        gg.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg.getGr());
         DGraph g=new DGraph();
-        g.addNode(new node(1,new Point3D(20,20,0),0));
-        g.addNode(new node(2,new Point3D(30,30,0),0));
+        g.addNode(new node(1,new Point3D(20,20,0)));
+        g.addNode(new node(2,new Point3D(30,30,0)));
         g.connect(1,2,5);
         g.connect(2,1,3);
         Graph_Gui g1=new Graph_Gui(g);
@@ -30,15 +37,30 @@ public class Graph_Gui {
         gg2.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg2.getGr());
     }
 
+    /**
+     * this is a default constructor which building a random graph using graph factory.
+     */
     public Graph_Gui() {
         gr = GraphFactory();
 
     }
 
+    /**
+     * this constructor init graph g as the graph to draw.
+     * @param g graph to init and draw.
+     */
     public Graph_Gui(graph g) {
         gr = new DGraph((DGraph) g);
     }
 
+    /**
+     * this function draws the graph you send to, using StdDraw library.
+     * @param w width of the canvas
+     * @param h height of the canvas
+     * @param rx range of x axis
+     * @param ry range of y axis
+     * @param g the graph you want to draw.
+     */
     public void DrawGraph(int w, int h, Range rx, Range ry, DGraph g) {
         StdDraw.setgraph(g);
         StdDraw.setCanvasSize(w, h);
@@ -73,10 +95,15 @@ public class Graph_Gui {
         StdDraw.save("MyGraph.jpg");
     }
 
+    /**
+     * this is a graph factory to draw a random graph.
+     * the random graph has 10 vertices in random location.
+     * @return
+     */
     public DGraph GraphFactory() {
         DGraph gr = new DGraph();
         for (int i = 1; i < 11; i++) {
-            gr.addNode(new node(i, new Point3D((int) (Math.random() * 50) + 1, (int) (Math.random() * 50) + 1, 0), 0));
+            gr.addNode(new node(i, new Point3D((int) (Math.random() * 50) + 1, (int) (Math.random() * 50) + 1, 0)));
         }
         for (int i = 1; i < 9; i++) {
             gr.connect(i, i + 1, (int) (Math.random() * 20) + 1);

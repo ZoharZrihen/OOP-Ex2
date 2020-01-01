@@ -46,20 +46,20 @@ public class Graph_AlgoTest {
         for(int i=1;i<5;i++){
             gra.addNode(new node(i));
         }
-       // gra.addNode(new node(6));
+        // gra.addNode(new node(6));
 
         gra.connect(1,2,0);
         gra.connect(2,3,0);
         gra.connect(3,4,0);
-       // gra.connect(4,5,0);
-       // gra.connect(5,4,0);
+        // gra.connect(4,5,0);
+        // gra.connect(5,4,0);
         gra.connect(4,3,0);
         gra.connect(3,2,0);
         gra.connect(2,1,0);
-       // gra.connect(5,6,0);
+        // gra.connect(5,6,0);
         ga.init(gra);
         assertTrue(ga.isConnected());
-       // gra.removeEdge(3,4);
+        // gra.removeEdge(3,4);
         //assertFalse(ga.isConnected());
         //gra.connect(3,4,0);
         gra.removeNode(3);
@@ -154,4 +154,5 @@ public class Graph_AlgoTest {
         ga.getGr().removeNode(1);
         assertNotEquals(copy.toString(),ga.getGr().toString());
     }
+
 }
