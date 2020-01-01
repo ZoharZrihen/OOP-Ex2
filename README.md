@@ -30,9 +30,3 @@ This project has a advanced GUI class which can show\build your graph and run al
   
 
 
-# Tests
-* This project contain a package of tests for each class, using JUnit4.
-* Those tests are example for how to use all the classes and the methods of each class.
-* The tests package also checks that everything is working well.
-
-
