@@ -18,13 +18,13 @@ This project has a advanced GUI class which can show\build your graph and run al
 * Save\init: Saves\initilaizing a graph to\from file. 
 * TSP: This method get list of vertices and computes a relatively short path which visit each node in the targets List.just a simple path going over all nodes in the list.
 
-# The Graphic user interface:
+# The Graphic user interface
 * The project contains an advanced GUI.
 * It can draw you graph and run all Algorithms on it.
 * User can build is graph from zero through the gui.
 * User can load\save the graph through the gui.
 
-*** for more infromation, photos and examples visit the wiki page.***
+***for more infromation, photos and examples visit the wiki page.***
 
   
   
