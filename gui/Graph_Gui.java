@@ -34,7 +34,7 @@ public class Graph_Gui {
         Graph_Gui g1=new Graph_Gui(g);
         DGraph g11=new DGraph();
         Graph_Gui gg2=new Graph_Gui(g11);
-        gg2.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg2.getGr());
+       // gg2.DrawGraph(1000, 600, new Range(-10, 60), new Range(-10, 60),gg2.getGr());
     }
 
     /**
@@ -50,6 +50,9 @@ public class Graph_Gui {
      * @param g graph to init and draw.
      */
     public Graph_Gui(graph g) {
+        if(g==null ||g.nodeSize()==0){
+            g=new DGraph();
+        }
         gr = new DGraph((DGraph) g);
     }
 
@@ -62,6 +65,9 @@ public class Graph_Gui {
      * @param g the graph you want to draw.
      */
     public void DrawGraph(int w, int h, Range rx, Range ry, DGraph g) {
+        if(g==null||g.nodeSize()==0){
+            g=new DGraph();
+        }
         StdDraw.setgraph(g);
         StdDraw.setCanvasSize(w, h);
         StdDraw.setXscale(rx.get_min(), rx.get_max());

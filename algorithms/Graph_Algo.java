@@ -22,9 +22,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	private DGraph gr = new DGraph();
 
 	public Graph_Algo(graph graph) {
-		gr=new DGraph((DGraph) graph);
+		if (graph == null) {
+			gr = new DGraph();
+		} else {
+			gr = new DGraph((DGraph) graph);
+		}
 	}
-
 	public Graph_Algo() {
 		gr=new DGraph();
 	}
@@ -67,6 +70,9 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 	 */
 	@Override
 	public boolean isConnected() {
+		if(gr==null||gr.nodeSize()==0){
+			return true;
+		}
 		DGraph copy= (DGraph) gr.copy();
 		Object[] arr = copy.getVertices().keySet().toArray();
 		DFS(((node) copy.getVertices().get(arr[0])),copy);

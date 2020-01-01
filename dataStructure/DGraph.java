@@ -22,21 +22,26 @@ public class DGraph implements graph, Serializable {
 	 *
 	 */
 	public DGraph(){
-		numOfVertices=0;
 		vertices=new HashMap<Integer, node_data>();
 		edges=new HashMap<Integer, HashMap<Integer, edge_data>>();
+		numOfVertices=0;
+		ModeCount=0;
+		numOfEdgesG=0;
 	}
 	/**
 	 * copy constructor
 	 * implements shallow copy for the graph
 	 */
-	public DGraph(DGraph gr){
-		numOfVertices=gr.nodeSize();
-		vertices=new HashMap<>(gr.getVertices());
-		edges=new HashMap<>(gr.getEdges());
-		ModeCount=0;
+	public DGraph(DGraph gr) {
+		if (gr == null) {
+			gr = new DGraph();
+		} else {
+			numOfVertices = gr.nodeSize();
+			vertices = new HashMap<>(gr.getVertices());
+			edges = new HashMap<>(gr.getEdges());
+			ModeCount = 0;
+		}
 	}
-
 	/**
 	 * this function makes a deep copy for the graph.
 	 * @return deep copy of this graph.
