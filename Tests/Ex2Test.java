@@ -1,3 +1,5 @@
+package Tests;
+
 import algorithms.*;
 import dataStructure.*;
 import org.junit.Test;
@@ -20,7 +22,7 @@ import static org.junit.Assert.fail;
  * @author boaz.benmoshe
  *
  */
-public class Ex2Test {
+ class Ex2Test {
     private static graph _graph;
     private static graph_algorithms _alg;
     public static final double EPS = 0.001;
